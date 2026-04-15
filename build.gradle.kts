@@ -2,6 +2,8 @@ plugins {
     kotlin("jvm") version "2.3.10"
     kotlin("plugin.allopen") version "2.3.10"
     id("io.quarkus")
+    id("org.sonarqube") version "6.0.1.5171"
+    jacoco
 }
 
 repositories {
@@ -42,5 +44,32 @@ kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
         javaParameters = true
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "demo-sonar")
+        property("sonar.projectName", "demo-sonar")
+        property("sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory.get()}/reports/jacoco/test/jacocoTestReport.xml")
+        property("sonar.kotlin.file.suffixes", ".kt")
+        property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.newCode.referenceBranch", "main")
     }
 }
