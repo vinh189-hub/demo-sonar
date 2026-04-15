@@ -3,7 +3,6 @@ plugins {
     kotlin("plugin.allopen") version "2.3.10"
     id("io.quarkus")
     id("jacoco")
-    id("org.sonarqube") version "6.0.1.5171"
 }
 
 repositories {
@@ -55,11 +54,3 @@ tasks.jacocoTestReport {
     }
 }
 
-sonarqube {
-    properties {
-        property("sonar.projectKey", "demo-sonar")
-        property("sonar.projectName", "demo-sonar")
-        property("sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory.get()}/reports/jacoco/test/jacocoTestReport.xml")
-        property("sonar.kotlin.source.version", "21")
-    }
-}
